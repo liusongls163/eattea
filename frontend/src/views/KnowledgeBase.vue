@@ -2,10 +2,24 @@
   <div class="knowledge-page">
     <div class="page-header">
       <h2>金融业务知识库</h2>
-      <el-button type="primary" @click="openCreate">
-        <el-icon><Plus /></el-icon>
-        新增词条
-      </el-button>
+      <div>
+        <el-upload
+          :auto-upload="false"
+          :show-file-list="false"
+          accept=".xls,.xlsx"
+          :on-change="handleImportFile"
+          style="display: inline-block; margin-right: 10px;"
+        >
+          <el-button type="success">
+            <el-icon><Upload /></el-icon>
+            批量导入
+          </el-button>
+        </el-upload>
+        <el-button type="primary" @click="openCreate">
+          <el-icon><Plus /></el-icon>
+          新增词条
+        </el-button>
+      </div>
     </div>
 
     <!-- 分类筛选 -->
@@ -90,10 +104,10 @@
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
-import { Plus } from '@element-plus/icons-vue'
+import { Plus, Upload } from '@element-plus/icons-vue'
 import {
   getKnowledgeList, createKnowledgeEntry, updateKnowledgeEntry,
-  deleteKnowledgeEntry, getKnowledgeCategories
+  deleteKnowledgeEntry, getKnowledgeCategories, importKnowledgeEntries
 } from '../api'
 import { ElMessage } from 'element-plus'
 
@@ -172,6 +186,24 @@ async function handleDelete(id) {
     loadCategories()
   } catch (e) {
     ElMessage.error('删除失败')
+  }
+}
+
+async function handleImportFile(file) {
+  if (!file || !file.raw) return
+  const fd = new FormData()
+  fd.append('file', file.raw)
+  try {
+    const res = await importKnowledgeEntries(fd)
+    if (res.data.success) {
+      ElMessage.success(`成功导入 ${res.data.count} 条词条`)
+      loadData()
+      loadCategories()
+    } else {
+      ElMessage.error(res.data.error || '导入失败')
+    }
+  } catch (e) {
+    ElMessage.error('导入失败')
   }
 }
 

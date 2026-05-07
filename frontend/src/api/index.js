@@ -56,3 +56,7 @@ export function deleteKnowledgeEntry(id) {
 export function getKnowledgeCategories() {
   return api.get('/knowledge/categories')
 }
+
+export function importKnowledgeEntries(formData) {
+  return api.post('/knowledge/import', formData)
+}

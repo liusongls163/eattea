@@ -4,6 +4,7 @@ import com.eattea.entity.KnowledgeEntry;
 import com.eattea.service.KnowledgeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,20 @@ public class KnowledgeController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         knowledgeService.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 批量导入词条（Excel: 第1列术语 第2列定义 第3列分类 第4列关联术语 第5列出处，第一行为表头）
+     */
+    @PostMapping("/import")
+    public ResponseEntity<Map<String, Object>> importExcel(@RequestParam("file") MultipartFile file) {
+        try {
+            int count = knowledgeService.importFromExcel(file);
+            return ResponseEntity.ok(Map.of("success", true, "count", count));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(Map.of("success", false, "error", e.getMessage()));
+        }
     }
 
     /**
