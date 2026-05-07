@@ -1,0 +1,27 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: eattea
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3307/eattea?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    username: root
+    password: Root@1234
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.eattea.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# 文件上传路径（内网服务器按需修改）
+eattea:
+  upload-path: /Users/liusong/log
+  allowed-extensions: pdf,doc,docx,xls,xlsx

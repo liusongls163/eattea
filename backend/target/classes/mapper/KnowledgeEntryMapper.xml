@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.KnowledgeEntryMapper">
+
+    <resultMap id="knowledgeMap" type="com.eattea.entity.KnowledgeEntry">
+        <id column="id" property="id"/>
+        <result column="term" property="term"/>
+        <result column="definition" property="definition"/>
+        <result column="category" property="category"/>
+        <result column="related_terms" property="relatedTerms"/>
+        <result column="source" property="source"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO eattea_knowledge (term, definition, category, related_terms, source, create_time, update_time)
+        VALUES (#{term}, #{definition}, #{category}, #{relatedTerms}, #{source}, NOW(), NOW())
+    </insert>
+
+    <select id="selectById" resultMap="knowledgeMap">
+        SELECT * FROM eattea_knowledge WHERE id = #{id}
+    </select>
+
+    <select id="selectByCategory" resultMap="knowledgeMap">
+        SELECT * FROM eattea_knowledge
+        WHERE category = #{category}
+        ORDER BY term
+    </select>
+
+    <select id="selectAll" resultMap="knowledgeMap">
+        SELECT * FROM eattea_knowledge ORDER BY category, term
+    </select>
+
+    <!-- MySQL ngram 全文检索 -->
+    <select id="searchByFulltext" resultMap="knowledgeMap">
+        SELECT *, MATCH(term, definition) AGAINST(#{keyword} IN BOOLEAN MODE) AS relevance
+        FROM eattea_knowledge
+        WHERE MATCH(term, definition) AGAINST(#{keyword} IN BOOLEAN MODE)
+        ORDER BY relevance DESC
+        LIMIT 50
+    </select>
+
+    <update id="update">
+        UPDATE eattea_knowledge SET
+            term = #{term}, definition = #{definition}, category = #{category},
+            related_terms = #{relatedTerms}, source = #{source}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM eattea_knowledge WHERE id = #{id}
+    </delete>
+
+</mapper>

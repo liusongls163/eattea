@@ -1,0 +1,13 @@
+/Users/liusong/eattea/backend/src/main/java/com/eattea/service/DocumentService.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/service/KnowledgeService.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/entity/KnowledgeEntry.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/controller/KnowledgeController.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/mapper/CategoryMapper.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/entity/Category.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/controller/DocumentController.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/mapper/KnowledgeEntryMapper.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/dto/SearchResult.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/config/CorsConfig.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/mapper/DocumentMapper.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/EatteaApplication.java
+/Users/liusong/eattea/backend/src/main/java/com/eattea/entity/Document.java

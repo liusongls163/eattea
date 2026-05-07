@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.DocumentMapper">
+
+    <resultMap id="documentMap" type="com.eattea.entity.Document">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="file_name" property="fileName"/>
+        <result column="file_type" property="fileType"/>
+        <result column="file_path" property="filePath"/>
+        <result column="content" property="content"/>
+        <result column="department" property="department"/>
+        <result column="doc_category" property="docCategory"/>
+        <result column="publish_date" property="publishDate"/>
+        <result column="tags" property="tags"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO eattea_document (title, file_name, file_type, file_path, content,
+                                     department, doc_category, publish_date, tags, create_time, update_time)
+        VALUES (#{title}, #{fileName}, #{fileType}, #{filePath}, #{content},
+                #{department}, #{docCategory}, #{publishDate}, #{tags}, NOW(), NOW())
+    </insert>
+
+    <select id="selectById" resultMap="documentMap">
+        SELECT * FROM eattea_document WHERE id = #{id}
+    </select>
+
+    <select id="selectList" resultMap="documentMap">
+        SELECT * FROM eattea_document
+        <where>
+            <if test="keyword != null and keyword != ''">
+                AND (title LIKE CONCAT('%', #{keyword}, '%') OR content LIKE CONCAT('%', #{keyword}, '%'))
+            </if>
+            <if test="department != null and department != ''">
+                AND department = #{department}
+            </if>
+            <if test="docCategory != null and docCategory != ''">
+                AND doc_category = #{docCategory}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- MySQL ngram 全文检索 -->
+    <select id="searchByFulltext" resultMap="documentMap">
+        SELECT id, title, file_name, file_type, department, doc_category,
+               publish_date, tags, create_time,
+               MATCH(content) AGAINST(#{keyword} IN BOOLEAN MODE) AS relevance
+        FROM eattea_document
+        WHERE MATCH(content) AGAINST(#{keyword} IN BOOLEAN MODE)
+        ORDER BY relevance DESC
+        LIMIT 50
+    </select>
+
+    <update id="update">
+        UPDATE eattea_document SET
+            title = #{title}, department = #{department}, doc_category = #{docCategory},
+            publish_date = #{publishDate}, tags = #{tags}, update_time = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM eattea_document WHERE id = #{id}
+    </delete>
+
+</mapper>
