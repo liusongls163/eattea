@@ -3,10 +3,10 @@ server:
 
 spring:
   application:
-    name: eattea
+    name: pm-cockpit
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3307/eattea?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
+    url: jdbc:mysql://localhost:3307/pm_cockpit?useSSL=false&createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&nullCatalogMeansCurrent=true&allowPublicKeyRetrieval=true&rewriteBatchedStatements=true
     username: root
     password: Root@1234
   servlet:
@@ -21,7 +21,15 @@ mybatis:
     map-underscore-to-camel-case: true
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-# 文件上传路径（内网服务器按需修改）
+# AI 配置（LLM API）
+pm:
+  ai:
+    enabled: false                          # 设为 true 启用 AI，需配置 endpoint 和 api-key
+    endpoint: https://api.openai.com/v1/chat/completions
+    api-key: ""
+    model: gpt-4o-mini
+
+# 文件上传路径
 eattea:
   upload-path: /Users/liusong/log
   allowed-extensions: pdf,doc,docx,xls,xlsx

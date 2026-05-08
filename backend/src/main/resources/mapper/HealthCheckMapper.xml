@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.HealthCheckMapper">
+
+    <select id="selectByProject" resultType="com.eattea.entity.HealthCheck">
+        SELECT * FROM pm_health_check WHERE project_id = #{projectId} ORDER BY check_date DESC
+    </select>
+
+    <select id="selectLatest" resultType="com.eattea.entity.HealthCheck">
+        SELECT * FROM pm_health_check WHERE project_id = #{projectId} ORDER BY check_date DESC LIMIT 1
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_health_check (project_id, health_status, overdue_tasks, blocked_tasks,
+            risk_summary, suggestions, member_load)
+        VALUES (#{projectId}, #{healthStatus}, #{overdueTasks}, #{blockedTasks},
+            #{riskSummary}, #{suggestions}, #{memberLoad})
+    </insert>
+
+    <delete id="deleteByProject">
+        DELETE FROM pm_health_check WHERE project_id = #{projectId}
+    </delete>
+
+</mapper>

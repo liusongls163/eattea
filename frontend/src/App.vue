@@ -1,54 +1,28 @@
 <template>
-  <div id="app-container">
-    <el-container>
-      <!-- 顶部导航 -->
-      <el-header class="app-header">
-        <div class="header-left">
-          <span class="logo">🍵 eattea</span>
-          <span class="subtitle">金融监管知识平台</span>
-        </div>
-        <el-menu
-          mode="horizontal"
-          :default-active="activeMenu"
-          router
-          background-color="#1a2332"
-          text-color="#c0c4cc"
-          active-text-color="#409eff"
-        >
-          <el-menu-item index="/">
-            <el-icon><Search /></el-icon>
-            <span>首页搜索</span>
-          </el-menu-item>
-          <el-menu-item index="/documents">
-            <el-icon><Folder /></el-icon>
-            <span>监管文档</span>
-          </el-menu-item>
-          <el-menu-item index="/knowledge">
-            <el-icon><Collection /></el-icon>
-            <span>金融知识库</span>
-          </el-menu-item>
-        </el-menu>
-      </el-header>
-
-      <!-- 主体内容 -->
-      <el-main>
-        <router-view />
-      </el-main>
-    </el-container>
+  <div id="app" class="app-container">
+    <header class="app-header">
+      <div class="header-content">
+        <h1 class="app-logo" @click="router.push('/')">
+          <el-icon size="24"><Monitor /></el-icon>
+          PM 驾驶舱
+        </h1>
+        <nav class="header-nav">
+          <el-button text @click="router.push('/')">仪表盘</el-button>
+          <el-button text @click="router.push('/members')">团队成员</el-button>
+        </nav>
+      </div>
+    </header>
+    <main class="app-main">
+      <router-view />
+    </main>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { Search, Folder, Collection } from '@element-plus/icons-vue'
+import { useRouter } from 'vue-router'
+import { Monitor } from '@element-plus/icons-vue'
 
-const route = useRoute()
-const activeMenu = computed(() => {
-  if (route.path.startsWith('/documents')) return '/documents'
-  if (route.path.startsWith('/knowledge')) return '/knowledge'
-  return '/'
-})
+const router = useRouter()
 </script>
 
 <style>
@@ -59,48 +33,62 @@ const activeMenu = computed(() => {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
-    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-  background: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background: #f5f7fa;
+  color: #303133;
+}
+
+.app-container {
+  min-height: 100vh;
 }
 
 .app-header {
-  background: #1a2332 !important;
+  background: #1a2332;
+  color: #fff;
+  height: 56px;
   display: flex;
   align-items: center;
   padding: 0 24px;
-  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
-.header-left {
+.header-content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.app-logo {
+  font-size: 18px;
+  cursor: pointer;
   display: flex;
   align-items: center;
-  margin-right: 40px;
-}
-
-.logo {
-  font-size: 20px;
+  gap: 8px;
   font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.header-nav {
+  display: flex;
+  gap: 8px;
+}
+
+.header-nav .el-button {
+  color: #c0c4cc;
+}
+
+.header-nav .el-button:hover {
   color: #fff;
-  margin-right: 12px;
 }
 
-.subtitle {
-  font-size: 13px;
-  color: #909399;
-}
-
-.el-menu--horizontal {
-  border-bottom: none !important;
-}
-
-.el-menu--horizontal > .el-menu-item {
-  height: 60px;
-  line-height: 60px;
-}
-
-.el-main {
-  min-height: calc(100vh - 60px);
+.app-main {
+  max-width: 1400px;
+  margin: 0 auto;
   padding: 24px;
 }
 </style>

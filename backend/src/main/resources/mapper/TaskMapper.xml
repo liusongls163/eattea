@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.TaskMapper">
+
+    <resultMap id="taskWithMember" type="com.eattea.entity.Task">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="title" property="title"/>
+        <result column="description" property="description"/>
+        <result column="assignee_id" property="assigneeId"/>
+        <result column="status" property="status"/>
+        <result column="priority" property="priority"/>
+        <result column="estimated_hours" property="estimatedHours"/>
+        <result column="actual_hours" property="actualHours"/>
+        <result column="start_date" property="startDate"/>
+        <result column="due_date" property="dueDate"/>
+        <result column="progress" property="progress"/>
+        <result column="tags" property="tags"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="assignee_name" property="assigneeName"/>
+    </resultMap>
+
+    <select id="selectByProject" resultType="com.eattea.entity.Task">
+        SELECT * FROM pm_task WHERE project_id = #{projectId} ORDER BY due_date ASC, priority DESC, id DESC
+    </select>
+
+    <select id="selectByProjectWithMember" resultMap="taskWithMember">
+        SELECT t.*, m.name AS assignee_name
+        FROM pm_task t
+        LEFT JOIN pm_member m ON t.assignee_id = m.id
+        WHERE t.project_id = #{projectId}
+        ORDER BY t.due_date ASC, t.priority DESC, t.id DESC
+    </select>
+
+    <select id="selectById" resultMap="taskWithMember">
+        SELECT t.*, m.name AS assignee_name
+        FROM pm_task t
+        LEFT JOIN pm_member m ON t.assignee_id = m.id
+        WHERE t.id = #{id}
+    </select>
+
+    <select id="selectByAssignee" resultType="com.eattea.entity.Task">
+        SELECT * FROM pm_task WHERE assignee_id = #{assigneeId} ORDER BY due_date ASC
+    </select>
+
+    <select id="selectBlockedByProject" resultType="com.eattea.entity.Task">
+        SELECT * FROM pm_task WHERE project_id = #{projectId} AND status = 'blocked'
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_task (project_id, title, description, assignee_id, status, priority,
+            estimated_hours, actual_hours, start_date, due_date, progress, tags)
+        VALUES (#{projectId}, #{title}, #{description}, #{assigneeId}, #{status}, #{priority},
+            #{estimatedHours}, #{actualHours}, #{startDate}, #{dueDate}, #{progress}, #{tags})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_task
+        SET title = #{title}, description = #{description}, assignee_id = #{assigneeId},
+            status = #{status}, priority = #{priority}, estimated_hours = #{estimatedHours},
+            actual_hours = #{actualHours}, start_date = #{startDate}, due_date = #{dueDate},
+            progress = #{progress}, tags = #{tags}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_task WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByProject">
+        DELETE FROM pm_task WHERE project_id = #{projectId}
+    </delete>
+
+</mapper>

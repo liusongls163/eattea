@@ -5,27 +5,21 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Home',
-      component: () => import('../views/Home.vue'),
-      meta: { title: '首页搜索' }
+      name: 'Dashboard',
+      component: () => import('../views/Dashboard.vue'),
+      meta: { title: '项目管理驾驶舱' }
     },
     {
-      path: '/documents',
-      name: 'Documents',
-      component: () => import('../views/DocumentList.vue'),
-      meta: { title: '监管文档' }
+      path: '/projects/:id',
+      name: 'ProjectDetail',
+      component: () => import('../views/ProjectDetail.vue'),
+      meta: { title: '项目详情' }
     },
     {
-      path: '/documents/:id',
-      name: 'DocumentDetail',
-      component: () => import('../views/DocumentDetail.vue'),
-      meta: { title: '文档详情' }
-    },
-    {
-      path: '/knowledge',
-      name: 'Knowledge',
-      component: () => import('../views/KnowledgeBase.vue'),
-      meta: { title: '金融知识库' }
+      path: '/members',
+      name: 'Members',
+      component: () => import('../views/Members.vue'),
+      meta: { title: '团队成员' }
     }
   ]
 })

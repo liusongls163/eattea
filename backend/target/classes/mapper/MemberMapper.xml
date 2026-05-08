@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.MemberMapper">
+
+    <select id="selectAll" resultType="com.eattea.entity.Member">
+        SELECT * FROM pm_member ORDER BY name
+    </select>
+
+    <select id="selectById" resultType="com.eattea.entity.Member">
+        SELECT * FROM pm_member WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_member (name, role, email, department)
+        VALUES (#{name}, #{role}, #{email}, #{department})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_member SET name = #{name}, role = #{role}, email = #{email}, department = #{department}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_member WHERE id = #{id}
+    </delete>
+
+</mapper>

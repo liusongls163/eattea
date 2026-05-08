@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.RiskMapper">
+
+    <resultMap id="riskWithOwner" type="com.eattea.entity.Risk">
+        <id column="id" property="id"/>
+        <result column="project_id" property="projectId"/>
+        <result column="title" property="title"/>
+        <result column="category" property="category"/>
+        <result column="probability" property="probability"/>
+        <result column="impact" property="impact"/>
+        <result column="level" property="level"/>
+        <result column="status" property="status"/>
+        <result column="mitigation" property="mitigation"/>
+        <result column="owner_id" property="ownerId"/>
+        <result column="identified_date" property="identifiedDate"/>
+        <result column="resolved_date" property="resolvedDate"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="owner_name" property="ownerName"/>
+    </resultMap>
+
+    <select id="selectByProject" resultMap="riskWithOwner">
+        SELECT r.*, m.name AS owner_name
+        FROM pm_risk r LEFT JOIN pm_member m ON r.owner_id = m.id
+        WHERE r.project_id = #{projectId}
+        ORDER BY (CASE r.level WHEN 'high' THEN 1 WHEN 'medium' THEN 2 ELSE 3 END),
+                 r.identified_date DESC
+    </select>
+
+    <select id="selectById" resultMap="riskWithOwner">
+        SELECT r.*, m.name AS owner_name
+        FROM pm_risk r LEFT JOIN pm_member m ON r.owner_id = m.id
+        WHERE r.id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_risk (project_id, title, category, probability, impact, level, status,
+            mitigation, owner_id, identified_date, resolved_date)
+        VALUES (#{projectId}, #{title}, #{category}, #{probability}, #{impact}, #{level}, #{status},
+            #{mitigation}, #{ownerId}, #{identifiedDate}, #{resolvedDate})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_risk
+        SET title = #{title}, category = #{category}, probability = #{probability},
+            impact = #{impact}, level = #{level}, status = #{status},
+            mitigation = #{mitigation}, owner_id = #{ownerId},
+            identified_date = #{identifiedDate}, resolved_date = #{resolvedDate}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_risk WHERE id = #{id}
+    </delete>
+
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.StakeholderMapper">
+
+    <select id="selectByProject" resultType="com.eattea.entity.Stakeholder">
+        SELECT * FROM pm_stakeholder WHERE project_id = #{projectId} ORDER BY
+        (CASE influence WHEN 'high' THEN 1 WHEN 'normal' THEN 2 ELSE 3 END)
+    </select>
+
+    <select id="selectById" resultType="com.eattea.entity.Stakeholder">
+        SELECT * FROM pm_stakeholder WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_stakeholder (project_id, name, role, department, influence, contact, expectations)
+        VALUES (#{projectId}, #{name}, #{role}, #{department}, #{influence}, #{contact}, #{expectations})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_stakeholder
+        SET name = #{name}, role = #{role}, department = #{department},
+            influence = #{influence}, contact = #{contact}, expectations = #{expectations}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_stakeholder WHERE id = #{id}
+    </delete>
+
+</mapper>

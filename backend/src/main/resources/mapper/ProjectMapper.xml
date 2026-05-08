@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.ProjectMapper">
+
+    <select id="selectAll" resultType="com.eattea.entity.Project">
+        SELECT * FROM pm_project ORDER BY update_time DESC
+    </select>
+
+    <select id="selectByStatus" resultType="com.eattea.entity.Project">
+        SELECT * FROM pm_project WHERE status = #{status} ORDER BY update_time DESC
+    </select>
+
+    <select id="selectById" resultType="com.eattea.entity.Project">
+        SELECT * FROM pm_project WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_project (name, description, status, health, start_date, end_date)
+        VALUES (#{name}, #{description}, #{status}, #{health}, #{startDate}, #{endDate})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_project
+        SET name = #{name}, description = #{description}, status = #{status},
+            health = #{health}, start_date = #{startDate}, end_date = #{endDate}
+        WHERE id = #{id}
+    </update>
+
+    <update id="updateHealth">
+        UPDATE pm_project SET health = #{health} WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_project WHERE id = #{id}
+    </delete>
+
+</mapper>

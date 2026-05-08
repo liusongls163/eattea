@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.eattea.mapper.MilestoneMapper">
+
+    <select id="selectByProject" resultType="com.eattea.entity.Milestone">
+        SELECT * FROM pm_milestone WHERE project_id = #{projectId} ORDER BY target_date ASC
+    </select>
+
+    <select id="selectById" resultType="com.eattea.entity.Milestone">
+        SELECT * FROM pm_milestone WHERE id = #{id}
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO pm_milestone (project_id, name, description, target_date, actual_date, status)
+        VALUES (#{projectId}, #{name}, #{description}, #{targetDate}, #{actualDate}, #{status})
+    </insert>
+
+    <update id="update">
+        UPDATE pm_milestone
+        SET name = #{name}, description = #{description}, target_date = #{targetDate},
+            actual_date = #{actualDate}, status = #{status}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">
+        DELETE FROM pm_milestone WHERE id = #{id}
+    </delete>
+
+</mapper>
